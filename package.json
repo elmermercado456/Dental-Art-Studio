@@ -1,0 +1,22 @@
+{
+  "name": "pagina-web-dentista-premium",
+  "version": "1.0.0",
+  "description": "Landing page premium para consultorio dental con backend Express.js y Flask",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "dental",
+    "landing-page",
+    "express",
+    "flask",
+    "premium"
+  ],
+  "author": "Dr. Alejandro Ramos",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
