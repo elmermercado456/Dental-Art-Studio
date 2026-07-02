@@ -57,6 +57,11 @@ app.get('/api/health', (req, res) => {
     });
 });
 
+// Route to serve the dentist dashboard SPA prototype
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+});
+
 // Fallback to index.html for single page layout routes
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));

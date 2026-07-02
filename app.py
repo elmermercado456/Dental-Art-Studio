@@ -12,6 +12,11 @@ def serve_index():
     """Serve the index.html landing page from the public directory."""
     return send_from_directory(app.static_folder, 'index.html')
 
+@app.route('/dashboard')
+def serve_dashboard():
+    """Serve the dashboard.html SPA prototype from the public directory."""
+    return send_from_directory(app.static_folder, 'dashboard.html')
+
 @app.route('/<path:path>')
 def serve_static(path):
     """Serve static assets, CSS, and JS files from the public directory."""

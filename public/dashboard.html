@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Panel de Control Interno para Dental Art Studio">
+    <title>Dashboard Diario | Dental Art Studio</title>
+    
+    <!-- Google Fonts: Outfit for Headings, Inter for Body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#004b93',    // Dark Blue from wall logo
+                            chair: '#1b6ca8',   // Petrol/velvet chair blue
+                            coral: '#c53030',   // Coral/red from sublogo
+                            mint: '#10b981',    // Mint Green
+                            light: '#fcfbf9'    // Warm white wall background
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons for premium visual cues -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Outfit', sans-serif;
+        }
+        /* Custom scrollbar for timeline */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="h-full text-slate-800 flex flex-col lg:flex-row overflow-hidden">
+
+    <!-- SIDEBAR FOR DESKTOP / TOPBAR FOR MOBILE -->
+    <aside class="w-full lg:w-72 bg-white border-b lg:border-b-0 lg:border-r border-slate-200 flex flex-col shrink-0">
+        <!-- Brand Header -->
+        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <!-- Dental Logo Styled matching the icon shape -->
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-blue to-brand-chair flex items-center justify-center text-white shadow-md shadow-brand-chair/20">
+                    <i data-lucide="activity" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-brand-blue leading-tight">Dental Art</h1>
+                    <p class="text-xs font-semibold text-brand-coral uppercase tracking-wider">Studio</p>
+                </div>
+            </div>
+            <!-- Mobile Menu Indicator / Status Dot -->
+            <span class="inline-flex lg:hidden items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Activo
+            </span>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+            <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-xl bg-slate-100 text-brand-blue transition-all">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3 text-brand-chair"></i>
+                Dashboard Diario
+            </a>
+            <a href="/" class="flex items-center px-4 py-3 text-sm font-medium rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all">
+                <i data-lucide="globe" class="w-5 h-5 mr-3"></i>
+                Ver Sitio Web (Público)
+            </a>
+        </nav>
+
+        <!-- Doctor Profile Card Footer -->
+        <div class="p-4 border-t border-slate-100 bg-slate-50/50">
+            <div class="flex items-center space-x-3">
+                <div class="w-11 h-11 rounded-full bg-brand-chair/10 border-2 border-brand-chair/20 flex items-center justify-center text-brand-chair font-bold text-lg">
+                    DM
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-slate-800 leading-tight">Dr. Elmer Mercado</p>
+                    <p class="text-xs text-slate-500 font-medium">Cirujano Dentista</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN APP CONTAINER -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-y-auto lg:overflow-hidden bg-slate-50">
+        
+        <!-- TOP APP HEADER -->
+        <header class="bg-white border-b border-slate-200 px-6 py-5 shrink-0">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                
+                <!-- Welcome & Summary Info -->
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-2xl" id="greeting-icon">☀️</span>
+                        <h2 class="text-2xl font-bold text-slate-900" id="welcome-text">Buen día, Dr. Mercado</h2>
+                    </div>
+                    <p class="text-sm text-slate-500 mt-1" id="counters-summary">
+                        Hoy tienes <span class="font-semibold text-brand-blue" id="appointments-count">0</span> citas agendadas y <span class="font-semibold text-brand-coral" id="tasks-count">0</span> tareas pendientes.
+                    </p>
+                </div>
+
+                <!-- Date Display & Quick Action -->
+                <div class="flex items-center space-x-3 shrink-0">
+                    <div class="bg-slate-100 border border-slate-200 rounded-xl px-4 py-2 text-right">
+                        <p class="text-xs text-slate-500 uppercase font-semibold tracking-wider" id="current-day-name">Lunes</p>
+                        <p class="text-sm font-bold text-brand-blue" id="current-date-text">15 de Junio, 2026</p>
+                    </div>
+                    <button onclick="openAppointmentModal()" class="flex items-center px-4 py-2.5 bg-brand-blue hover:bg-brand-blue/90 text-white rounded-xl shadow-md shadow-brand-blue/15 hover:shadow-lg transition-all font-medium text-sm">
+                        <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i>
+                        Nueva Cita
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- DASHBOARD BODY: SCROLLABLE GRID -->
+        <div class="flex-1 p-6 overflow-y-auto lg:overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- LEFT COLUMN: TIMELINE (Agenda) -->
+            <section class="lg:col-span-7 xl:col-span-8 bg-white border border-slate-200 rounded-2xl shadow-sm flex flex-col min-w-0 h-full lg:overflow-hidden">
+                <div class="p-5 border-b border-slate-100 flex items-center justify-between shrink-0">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="p-1.5 rounded-lg bg-brand-chair/10 text-brand-chair">
+                            <i data-lucide="calendar" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Agenda del Día</h3>
+                    </div>
+                    <span class="text-xs text-slate-400 font-medium bg-slate-50 px-2.5 py-1 rounded-full border border-slate-200">8:00 AM - 8:00 PM</span>
+                </div>
+
+                <!-- Timeline List (Scrollable) -->
+                <div id="timeline-container" class="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar bg-slate-50/50">
+                    <!-- Dynamic Hour Slots will be generated here -->
+                </div>
+            </section>
+
+            <!-- RIGHT COLUMN: OPERATIVE TASKS & QUICK STATS -->
+            <section class="lg:col-span-5 xl:col-span-4 flex flex-col gap-6 h-full lg:overflow-y-auto custom-scrollbar pr-0 lg:pr-1">
+                
+                <!-- QUICK STATS CARD -->
+                <div class="bg-gradient-to-br from-brand-blue to-brand-chair text-white p-6 rounded-2xl shadow-md relative overflow-hidden shrink-0">
+                    <!-- Decorative background circles -->
+                    <div class="absolute -right-10 -bottom-10 w-40 h-40 rounded-full bg-white/5 pointer-events-none"></div>
+                    <div class="absolute -left-10 -top-10 w-24 h-24 rounded-full bg-white/5 pointer-events-none"></div>
+
+                    <h4 class="text-white/80 text-xs font-semibold uppercase tracking-wider mb-4">Progreso Diario</h4>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <p class="text-2xl font-extrabold" id="stat-completed-appointments">0</p>
+                            <p class="text-white/70 text-[10px] font-medium leading-tight">Citas Completadas</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-extrabold" id="stat-in-room">0</p>
+                            <p class="text-white/70 text-[10px] font-medium leading-tight">En Sala de Espera</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-extrabold" id="stat-pending-tasks">0</p>
+                            <p class="text-white/70 text-[10px] font-medium leading-tight">Tareas Pendientes</p>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="mt-5">
+                        <div class="flex justify-between text-xs font-medium text-white/90 mb-1">
+                            <span>Eficiencia del Día</span>
+                            <span id="efficiency-percent">0%</span>
+                        </div>
+                        <div class="w-full bg-white/20 rounded-full h-2">
+                            <div id="efficiency-bar" class="bg-brand-mint h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TO-DO LIST (Tareas Operativas) -->
+                <div class="bg-white border border-slate-200 rounded-2xl shadow-sm flex flex-col flex-1 min-h-[350px]">
+                    <div class="p-5 border-b border-slate-100 flex items-center justify-between shrink-0">
+                        <div class="flex items-center space-x-2.5">
+                            <div class="p-1.5 rounded-lg bg-brand-coral/10 text-brand-coral">
+                                <i data-lucide="check-square" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900">Tareas Operativas</h3>
+                        </div>
+                        <span class="text-xs font-bold bg-brand-coral/10 text-brand-coral px-2.5 py-1 rounded-full" id="todo-badge">0 Pendientes</span>
+                    </div>
+
+                    <!-- Task Add Bar -->
+                    <div class="p-4 bg-slate-50/50 border-b border-slate-100 shrink-0">
+                        <form id="add-task-form" onsubmit="handleAddTask(event)" class="flex gap-2">
+                            <input type="text" id="new-task-input" required placeholder="Ej. Llamar a laboratorio dental..." class="flex-1 text-sm bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-chair/20 focus:border-brand-chair transition-all">
+                            <button type="submit" class="bg-brand-chair hover:bg-brand-chair/90 text-white p-2.5 rounded-xl transition-all shadow-md shadow-brand-chair/15 shrink-0 flex items-center justify-center">
+                                <i data-lucide="plus" class="w-5 h-5"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Tasks List Scrollable -->
+                    <div id="tasks-container" class="flex-1 overflow-y-auto p-4 space-y-2.5 custom-scrollbar">
+                        <!-- Dynamic Tasks items will render here -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- MODAL: AGREGAR NUEVA CITA -->
+    <div id="appointment-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden transform scale-95 transition-transform duration-300 mx-4">
+            
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-brand-blue to-brand-chair p-5 text-white flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="calendar-plus" class="w-5 h-5"></i>
+                    <h3 class="font-bold text-lg">Programar Nueva Cita</h3>
+                </div>
+                <button onclick="closeAppointmentModal()" class="text-white/80 hover:text-white transition-all">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- Modal Form -->
+            <form id="appointment-form" onsubmit="handleCreateAppointment(event)" class="p-6 space-y-4">
+                
+                <!-- Paciente -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Nombre del Paciente</label>
+                    <div class="relative">
+                        <i data-lucide="user" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+                        <input type="text" id="patient-name" required placeholder="Ej. Ana María Rojas" class="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all">
+                    </div>
+                </div>
+
+                <!-- Hora de Inicio -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Hora de Cita</label>
+                        <select id="appointment-hour" required class="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all">
+                            <option value="08:00">08:00 AM</option>
+                            <option value="09:00">09:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="13:00">01:00 PM</option>
+                            <option value="14:00">02:00 PM</option>
+                            <option value="15:00">03:00 PM</option>
+                            <option value="16:00">04:00 PM</option>
+                            <option value="17:00">05:00 PM</option>
+                            <option value="18:00">06:00 PM</option>
+                            <option value="19:00">07:00 PM</option>
+                        </select>
+                    </div>
+
+                    <!-- Duración -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Duración aprox.</label>
+                        <select id="appointment-duration" required class="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all">
+                            <option value="30">30 minutos</option>
+                            <option value="60" selected>1 hora</option>
+                            <option value="90">1.5 horas</option>
+                            <option value="120">2 horas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tratamiento -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Tratamiento a Realizar</label>
+                    <select id="appointment-treatment" required class="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all">
+                        <option value="Profilaxis">Profilaxis Profunda</option>
+                        <option value="Endodoncia">Endodoncia</option>
+                        <option value="Ortodoncia">Ajuste de Ortodoncia</option>
+                        <option value="Blanqueamiento">Blanqueamiento Dental</option>
+                        <option value="Carilla de Resina">Carilla de Resina</option>
+                        <option value="Consulta General">Consulta / Evaluación General</option>
+                    </select>
+                </div>
+
+                <!-- Estado Inicial -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Estado Inicial</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="cursor-pointer border border-amber-200 bg-amber-50 text-amber-800 text-xs font-medium rounded-xl p-2.5 flex flex-col items-center justify-center gap-1 hover:bg-amber-100 transition-all select-none text-center">
+                            <input type="radio" name="initial-status" value="Pendiente" checked class="sr-only">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                            <span>Pendiente</span>
+                        </label>
+                        <label class="cursor-pointer border border-slate-200 bg-slate-50 text-slate-600 text-xs font-medium rounded-xl p-2.5 flex flex-col items-center justify-center gap-1 hover:bg-slate-100 transition-all select-none text-center">
+                            <input type="radio" name="initial-status" value="En sala" class="sr-only">
+                            <span class="w-2.5 h-2.5 rounded-full bg-brand-chair"></span>
+                            <span>En sala</span>
+                        </label>
+                        <label class="cursor-pointer border border-slate-200 bg-slate-50 text-slate-600 text-xs font-medium rounded-xl p-2.5 flex flex-col items-center justify-center gap-1 hover:bg-slate-100 transition-all select-none text-center">
+                            <input type="radio" name="initial-status" value="Completado" class="sr-only">
+                            <span class="w-2.5 h-2.5 rounded-full bg-brand-mint"></span>
+                            <span>Completado</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Footer buttons -->
+                <div class="flex space-x-3 pt-3 border-t border-slate-100">
+                    <button type="button" onclick="closeAppointmentModal()" class="flex-1 py-2.5 border border-slate-200 text-slate-600 rounded-xl text-sm font-medium hover:bg-slate-50 transition-all">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="flex-1 py-2.5 bg-brand-blue hover:bg-brand-blue/90 text-white rounded-xl text-sm font-semibold shadow-md shadow-brand-blue/15 hover:shadow-lg transition-all">
+                        Programar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script connection -->
+    <script src="dashboard.js"></script>
+</body>
+</html>
